@@ -45,8 +45,7 @@ The annotated artifacts are 12135 in total, across 10 scanned frames. Dust speck
 ## Artifact spatial frequency
 Each scan has been split into 250 by 250 pixel quadrants (with padding where required), in order to record the frequency of each type of artifact for each quadrant.
 
-![image](https://user-images.githubusercontent.com/32989037/183715251-6aa5fa0d-96c2-4b70-9a66-4ba76977730c.png)
-
+<img width="1242" alt="image" src="https://user-images.githubusercontent.com/32989037/183779453-13f4d213-c26f-42c2-8a05-7771923b2b5e.png">
 
 
 

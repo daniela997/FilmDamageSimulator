@@ -47,5 +47,7 @@ Each scan has been split into 250 by 250 pixel quadrants (with padding where req
 
 <img width="1242" alt="image" src="https://user-images.githubusercontent.com/32989037/183779453-13f4d213-c26f-42c2-8a05-7771923b2b5e.png">
 
+### Spatial distribution of artifacts
+![image](https://user-images.githubusercontent.com/32989037/183865984-e3a7fa31-c8cb-4291-be52-298ddbcd8da8.png)
 
 

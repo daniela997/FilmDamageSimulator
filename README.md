@@ -1,5 +1,7 @@
 # DustyScans
-Scans of empty 35mm film frames with annotated artifacts such as dust, scratches, dirt, hairs.
+Scans of empty 35mm film frames with annotated artifacts such as dust, scratches, dirt, hairs. Example of a fully annotated scanned image:
+
+![image](https://github.com/daniela997/DustyScans/blob/main/figures/annotated_example.png)
 
 ## Artifact sizes
 ### Conversion from pixel to micron

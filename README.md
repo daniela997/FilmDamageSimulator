@@ -45,11 +45,10 @@ The annotated artifacts are 12135 in total, across 10 scanned frames. Dust speck
 ![image](https://user-images.githubusercontent.com/32989037/183714488-f04e681f-7318-4d98-a5ab-68aeac497363.png) ![image](https://user-images.githubusercontent.com/32989037/183714598-bb658901-082a-49b5-9daa-4e2f847f0f27.png)
 
 ## Artifact spatial frequency
-Each scan has been split into 250 by 250 pixel quadrants (with padding where required), in order to record the frequency of each type of artifact for each quadrant.
+Each scan has been split into 256 by 256 pixel quadrants (with padding where required), in order to record the frequency of each type of artifact for each quadrant.
 
-<img width="1242" alt="image" src="https://user-images.githubusercontent.com/32989037/183779453-13f4d213-c26f-42c2-8a05-7771923b2b5e.png">
+Screenshot 2022-08-11 at 13.25.34<img width="1242" alt="image" src="https://user-images.githubusercontent.com/32989037/184132982-e45e1c01-890a-4814-ac34-9c823585b6fc.png">
 
 ### Spatial distribution of artifacts
-![image](https://user-images.githubusercontent.com/32989037/183865984-e3a7fa31-c8cb-4291-be52-298ddbcd8da8.png)
-
+![image](https://user-images.githubusercontent.com/32989037/184132734-673fd87d-f825-4baf-a1c0-7073a2425156.png)
 

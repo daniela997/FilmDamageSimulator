@@ -1,4 +1,7 @@
-# DustyScans
+# Film Damage Simulator
+This repository contains damaged film scans along with their annotations. Additionally, it provides code for our statistical model which uses these extracted artifacts to generate damage overlays.
+
+## DustyScans
 Scans of empty 35mm film frames with annotated artifacts such as dust, scratches, dirt, hairs. Example of a fully annotated scanned image:
 
 ![image](https://github.com/daniela997/DustyScans/blob/main/figures/annotated_example.png)

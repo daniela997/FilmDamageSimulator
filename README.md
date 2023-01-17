@@ -1,4 +1,6 @@
-# Film Damage Simulator
+# Simulating analogue film damage to analyse and improve artifact restoration on high-resolution scans
+
+## Film Damage Simulator
 This repository contains damaged film scans along with their annotations. Additionally, it provides code for our statistical model which uses these extracted artifacts to generate damage overlays.
 
 ## DustyScans

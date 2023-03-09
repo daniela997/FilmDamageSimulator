@@ -1,0 +1,1383 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
+  <!-- Replace the content tag with appropriate information -->
+  <meta name="description" content="This work proposes a statistical model of analogue film damage (e.g. scratches, dust, hairs),
+  which can be then used to train and evaluate models at the task of analogue film damage detection and restoration at high resolutions.">
+  <meta property="og:title" content="Simulating analogue film damage to analyse and improve artefact restoration on high-resolution scans"/>
+  <meta property="og:description" content="This work proposes a statistical model of analogue film damage (e.g. scratches, dust, hairs),
+  which can be then used to train and evaluate models at the task of analogue film damage detection and restoration at high resolutions."/>
+  <meta property="og:url" content="filmdamagesimulator.github.io"/>
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X630-->
+  <meta property="og:image" content="static/image/overview.png" />
+  <meta property="og:image:width" content="1200"/>
+  <meta property="og:image:height" content="630"/>
+
+
+  <!-- <meta name="twitter:title" content="TWITTER BANNER TITLE META TAG">
+  <meta name="twitter:description" content="TWITTER BANNER DESCRIPTION META TAG"> -->
+  <!-- Path to banner image, should be in the path listed below. Optimal dimenssions are 1200X600-->
+  <!-- <meta name="twitter:image" content="static/images/your_twitter_banner_image.png">
+  <meta name="twitter:card" content="summary_large_image"> -->
+  <!-- Keywords for your paper to be indexed by-->
+  <!-- <meta name="keywords" content="KEYWORDS SHOULD BE PLACED HERE">
+  <meta name="viewport" content="width=device-width, initial-scale=1"> -->
+
+
+  <title>Simulating analogue film damage to analyse and improve artefact restoration on high-resolution scans</title>
+  <link rel="icon" type="image/x-icon" href="static/images/favicon.ico">
+  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
+  rel="stylesheet">
+
+  <link rel="stylesheet" href="static/css/bulma.min.css">
+  <link rel="stylesheet" href="static/css/bulma-carousel.min.css">
+  <link rel="stylesheet" href="static/css/bulma-slider.min.css">
+  <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="stylesheet" href="static/css/magnify.css">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://documentcloud.adobe.com/view-sdk/main.js"></script>
+  <script defer src="static/js/fontawesome.all.min.js"></script>
+  <script src="static/js/bulma-carousel.min.js"></script>
+  <script src="static/js/bulma-slider.min.js"></script>
+  <script src="static/js/index.js"></script>
+  <script src="static/js/slider.js"></script>
+  <style>
+    /* Demo CSS */
+    html {
+      width: 100%;
+      height: 100%;
+      display: table;
+    }
+    body {
+      width: 100%;
+      height: 100%;
+      display: table-cell;
+      font-family: sans-serif;
+      font-size: 12px;
+      padding: 1em;
+      text-align: center;
+      vertical-align: middle;
+    }
+    img {
+      border: none;
+    }
+
+    input[type=radio] {
+    border: 0px;
+    width: 5%;
+    height: 1.5em;
+    }
+    .sample-subfig {
+      width: 100%;
+      max-width: 100%;
+      padding-bottom: 0.5em;
+      padding-top: 1em;
+      padding-left: 0.5em;
+      padding-right: 0.5em;
+
+    }
+    .magnify > .magnify-lens {
+      background-color: #fff !important; /* Prevent adjacent image from appearing in lens */
+    }
+
+    .grid-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* create a 3-column grid */
+    padding-left: 5em;
+    padding-right: 5em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    }
+    .grid-item {
+      grid-column: span 1; /* each div should span all 3 columns */
+    }
+
+    .slider-grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* create a 3-column grid */
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    }
+    .slider-grid-item {
+      grid-column: span 1; /* each div should span all 3 columns */
+      padding-top: 1em;
+      padding-bottom: 1em;
+    }
+
+    .text-padding {
+      margin-bottom: 1em;
+    }
+
+    /* -------------------------------- 
+
+    Primary style
+
+    -------------------------------- */
+    *, *:after, *:before {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    /* -------------------------------- 
+
+    Main components 
+
+    -------------------------------- */
+    header {
+      position: relative;
+      height: 160px;
+      line-height: 160px;
+      text-align: center;
+    }
+    header h1 {
+      font-size: 22px;
+      font-size: 1.375rem;
+      color: #ffffff;
+      font-weight: 300;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    @media only screen and (min-width: 768px) {
+      header {
+        height: 6em;
+        line-height: 1.6;
+      }
+      header h1 {
+        font-size: 32px;
+        font-size: 2rem;
+      }
+    }
+
+    .cd-image-container {
+      position: relative;
+      width: 90%;
+      max-width: 100%;
+      margin: 0em auto;
+      display: flex;
+    }
+    .cd-image-container img {
+      display: flex;
+    }
+
+    .cd-image-label {
+      position: absolute;
+      font-weight: 500;
+      letter-spacing: 1px;
+      top: 0;
+      right: 0;
+      color: #ffffff;
+      padding: 1em;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      opacity: 0;
+      -webkit-transform: translateY(20px);
+      -moz-transform: translateY(20px);
+      -ms-transform: translateY(20px);
+      -o-transform: translateY(20px);
+      transform: translateY(20px);
+      -webkit-transition: -webkit-transform 0.3s 0.7s, opacity 0.3s 0.7s;
+      -moz-transition: -moz-transform 0.3s 0.7s, opacity 0.3s 0.7s;
+      transition: transform 0.3s 0.7s, opacity 0.3s 0.7s;
+    }
+    .cd-image-label.is-hidden {
+      visibility: hidden;
+    }
+    .is-visible .cd-image-label {
+      opacity: 1;
+      -webkit-transform: translateY(0);
+      -moz-transform: translateY(0);
+      -ms-transform: translateY(0);
+      -o-transform: translateY(0);
+      transform: translateY(0);
+    }
+
+    .cd-resize-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      overflow: hidden;
+      /* Force Hardware Acceleration in WebKit */
+      -webkit-transform: translateZ(0);
+      -moz-transform: translateZ(0);
+      -ms-transform: translateZ(0);
+      -o-transform: translateZ(0);
+      transform: translateZ(0);
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+    }
+    .cd-resize-img img {
+      position: absolute;
+      left: 0;
+      top: 0;
+      display: block;
+      height: 100%;
+      width: auto;
+      max-width: none;
+    }
+    .cd-resize-img .cd-image-label {
+      right: auto;
+      left: 0;
+    }
+    .is-visible .cd-resize-img {
+      width: 50%;
+      /* bounce in animation of the modified image */
+      -webkit-animation: cd-bounce-in 0.7s;
+      -moz-animation: cd-bounce-in 0.7s;
+      animation: cd-bounce-in 0.7s;
+    }
+
+    @-webkit-keyframes cd-bounce-in {
+      0% {
+        width: 0;
+      }
+      60% {
+        width: 55%;
+      }
+      100% {
+        width: 50%;
+      }
+    }
+    @-moz-keyframes cd-bounce-in {
+      0% {
+        width: 0;
+      }
+      60% {
+        width: 55%;
+      }
+      100% {
+        width: 50%;
+      }
+    }
+    @keyframes cd-bounce-in {
+      0% {
+        width: 0;
+      }
+      60% {
+        width: 55%;
+      }
+      100% {
+        width: 50%;
+      }
+    }
+    .cd-handle {
+      position: absolute;
+      height: 44px;
+      width: 44px;
+      /* center the element */
+      left: 50%;
+      top: 50%;
+      margin-left: -22px;
+      margin-top: -22px;
+      border-radius: 50%;
+      background: #000000 url("https://images.clickfunnels.com/09/a714400d3211e7a0bd7d7140585054/cd-arrows.svg") no-repeat center center;
+      cursor: move;
+      box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.2), 0 0 10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      opacity: 0;
+      -webkit-transform: translate3d(0, 0, 0) scale(0);
+      -moz-transform: translate3d(0, 0, 0) scale(0);
+      -ms-transform: translate3d(0, 0, 0) scale(0);
+      -o-transform: translate3d(0, 0, 0) scale(0);
+      transform: translate3d(0, 0, 0) scale(0);
+    }
+    .cd-handle.draggable {
+      /* change background color when element is active */
+      background-color: #445b7c;
+    }
+    .is-visible .cd-handle {
+      opacity: 1;
+      -webkit-transform: translate3d(0, 0, 0) scale(1);
+      -moz-transform: translate3d(0, 0, 0) scale(1);
+      -ms-transform: translate3d(0, 0, 0) scale(1);
+      -o-transform: translate3d(0, 0, 0) scale(1);
+      transform: translate3d(0, 0, 0) scale(1);
+      -webkit-transition: -webkit-transform 0.3s 0.7s, opacity 0s 0.7s;
+      -moz-transition: -moz-transform 0.3s 0.7s, opacity 0s 0.7s;
+      transition: transform 0.3s 0.7s, opacity 0s 0.7s;
+    }
+
+    footer {
+      padding: 2rem;
+    }
+
+    footer p {
+      font-size: 90%;
+      font-weight: 300;
+      text-align: center;
+    }
+
+    /* Zebra Accordion plugin */
+    #accordion {
+      width: 100%;
+      min-width: 304px;
+      margin: 2rem auto;
+    }
+    #accordion dd {
+      display: none;
+      margin: 0;
+      padding: 1rem;
+    }
+    #accordion dt {
+      background: #393939;
+      border-bottom: 1px solid #fff;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+      padding: 0.5rem;
+    }
+    #accordion dt:hover {
+      opacity: 0.8;
+    }
+
+    #accordion2 {
+      width: 100%;
+      min-width: 304px;
+      margin: 2rem auto;
+    }
+    #accordion2 dd {
+      display: none;
+      margin: 0;
+      padding: 1rem;
+    }
+    #accordion2 dt {
+      background: #393939;
+      border-bottom: 1px solid #fff;
+      color: #fff;
+      cursor: pointer;
+      font-weight: bold;
+      padding: 0.5rem;
+    }
+    #accordion2 dt:hover {
+      opacity: 0.8;
+    }
+    </style>
+    <script>
+      jQuery(document).ready(function($){
+          var dragging = false,
+              scrolling = false,
+              resizing = false;
+          //cache jQuery objects
+          var imageComparisonContainers = $('.cd-image-container');
+          //check if the .cd-image-container is in the viewport 
+          //if yes, animate it
+          checkPosition(imageComparisonContainers);
+          $(window).on('scroll', function(){
+              if( !scrolling) {
+                  scrolling =  true;
+                  ( !window.requestAnimationFrame )
+                      ? setTimeout(function(){checkPosition(imageComparisonContainers);}, 100)
+                      : requestAnimationFrame(function(){checkPosition(imageComparisonContainers);});
+              }
+          });
+          
+          //make the .cd-handle element draggable and modify .cd-resize-img width according to its position
+          imageComparisonContainers.each(function(){
+              var actual = $(this);
+              drags(actual.find('.cd-handle'), actual.find('.cd-resize-img'), actual, actual.find('.cd-image-label[data-type="original"]'), actual.find('.cd-image-label[data-type="modified"]'));
+          });
+
+          //upadate images label visibility
+          $(window).on('resize', function(){
+              if( !resizing) {
+                  resizing =  true;
+                  ( !window.requestAnimationFrame )
+                      ? setTimeout(function(){checkLabel(imageComparisonContainers);}, 100)
+                      : requestAnimationFrame(function(){checkLabel(imageComparisonContainers);});
+              }
+          });
+
+          function checkPosition(container) {
+              container.each(function(){
+                  var actualContainer = $(this);
+                  if( $(window).scrollTop() + $(window).height()*0.5 > actualContainer.offset().top) {
+                      actualContainer.addClass('is-visible');
+                  }
+              });
+
+              scrolling = false;
+          }
+
+          function checkLabel(container) {
+              container.each(function(){
+                  var actual = $(this);
+                  updateLabel(actual.find('.cd-image-label[data-type="modified"]'), actual.find('.cd-resize-img'), 'left');
+                  updateLabel(actual.find('.cd-image-label[data-type="original"]'), actual.find('.cd-resize-img'), 'right');
+              });
+
+              resizing = false;
+          }
+
+          //draggable funtionality - credits to http://css-tricks.com/snippets/jquery/draggable-without-jquery-ui/
+          function drags(dragElement, resizeElement, container, labelContainer, labelResizeElement) {
+              dragElement.on("mousedown vmousedown", function(e) {
+                  dragElement.addClass('draggable');
+                  resizeElement.addClass('resizable');
+
+                  var dragWidth = dragElement.outerWidth(),
+                      xPosition = dragElement.offset().left + dragWidth - e.pageX,
+                      containerOffset = container.offset().left,
+                      containerWidth = container.outerWidth(),
+                      minLeft = containerOffset + 10,
+                      maxLeft = containerOffset + containerWidth - dragWidth - 10;
+                  
+                  dragElement.parents().on("mousemove vmousemove", function(e) {
+                      if( !dragging) {
+                          dragging =  true;
+                          ( !window.requestAnimationFrame )
+                              ? setTimeout(function(){animateDraggedHandle(e, xPosition, dragWidth, minLeft, maxLeft, containerOffset, containerWidth, resizeElement, labelContainer, labelResizeElement);}, 100)
+                              : requestAnimationFrame(function(){animateDraggedHandle(e, xPosition, dragWidth, minLeft, maxLeft, containerOffset, containerWidth, resizeElement, labelContainer, labelResizeElement);});
+                      }
+                  }).on("mouseup vmouseup", function(e){
+                      dragElement.removeClass('draggable');
+                      resizeElement.removeClass('resizable');
+                  });
+                  e.preventDefault();
+              }).on("mouseup vmouseup", function(e) {
+                  dragElement.removeClass('draggable');
+                  resizeElement.removeClass('resizable');
+              });
+          }
+
+          function animateDraggedHandle(e, xPosition, dragWidth, minLeft, maxLeft, containerOffset, containerWidth, resizeElement, labelContainer, labelResizeElement) {
+              var leftValue = e.pageX + xPosition - dragWidth;   
+              //constrain the draggable element to move inside his container
+              if(leftValue < minLeft ) {
+                  leftValue = minLeft;
+              } else if ( leftValue > maxLeft) {
+                  leftValue = maxLeft;
+              }
+
+              var widthValue = (leftValue + dragWidth/2 - containerOffset)*100/containerWidth+'%';
+              
+              $('.draggable').css('left', widthValue).on("mouseup vmouseup", function() {
+                  $(this).removeClass('draggable');
+                  resizeElement.removeClass('resizable');
+              });
+
+              $('.resizable').css('width', widthValue); 
+
+              // updateLabel(labelResizeElement, resizeElement, 'left');
+              // updateLabel(labelContainer, resizeElement, 'right');
+              dragging =  false;
+          }
+
+          function updateLabel(label, resizeElement, position) {
+              if(position == 'left') {
+                  ( label.offset().left + label.outerWidth() < resizeElement.offset().left + resizeElement.outerWidth() ) ? label.removeClass('is-hidden') : label.addClass('is-hidden') ;
+              } else {
+                  ( label.offset().left > resizeElement.offset().left + resizeElement.outerWidth() ) ? label.removeClass('is-hidden') : label.addClass('is-hidden') ;
+              }
+          }
+      });
+    
+  
+    </script>
+</head>
+<body>
+
+
+  <section class="hero">
+    <div class="hero-body">
+      <div class="container is-max-desktop">
+        <div class="columns is-centered">
+          <div class="column has-text-centered">
+            <h1 class="title is-1 publication-title">Simulating analogue film damage to analyse and improve artefact restoration on high-resolution scans</h1>
+            <div class="is-size-5 publication-authors">
+              <!-- Paper authors -->
+              <span class="author-block">
+                <a href="FIRST AUTHOR PERSONAL LINK" target="_blank">Daniela Ivanova</a></span>
+                <span class="author-block">
+                  <a href="SECOND AUTHOR PERSONAL LINK" target="_blank">John Williamson</a></span>
+                  <span class="author-block">
+                    <a href="THIRD AUTHOR PERSONAL LINK" target="_blank">Paul Henderson</a>
+                  </span>
+                  </div>
+
+                  <div class="is-size-5 publication-authors">
+                    <span class="author-block">University of Glasgow<br>Eurographics 2023</span>
+                    <!-- <span class="eql-cntrb"><small><br><sup>*</sup>Indicates Equal Contribution</small></span> -->
+                  </div>
+
+                  <div class="column has-text-centered">
+                    <div class="publication-links">
+                         <!-- Arxiv PDF link -->
+                      <span class="link-block">
+                        <a href="https://arxiv.org/pdf/2302.10004.pdf" target="_blank"
+                        class="external-link button is-normal is-rounded is-dark">
+                        <span class="icon">
+                          <i class="fas fa-file-pdf"></i>
+                        </span>
+                        <span>Paper</span>
+                      </a>
+                    </span>
+
+                    <!-- Supplementary PDF link -->
+                    <!-- <span class="link-block">
+                      <a href="static/pdfs/supplementary_material.pdf" target="_blank"
+                      class="external-link button is-normal is-rounded is-dark">
+                      <span class="icon">
+                        <i class="fas fa-file-pdf"></i>
+                      </span>
+                      <span>Supplementary</span>
+                    </a>
+                  </span> -->
+
+                  <!-- Github link -->
+                  <span class="link-block">
+                    <a href="https://github.com/daniela997/FilmDamageSimulator" target="_blank"
+                    class="external-link button is-normal is-rounded is-dark">
+                    <span class="icon">
+                      <i class="fab fa-github"></i>
+                    </span>
+                    <span>Code</span>
+                  </a>
+                </span>
+
+                <!-- ArXiv abstract Link -->
+                <span class="link-block">
+                  <a href="https://arxiv.org/abs/2302.10004" target="_blank"
+                  class="external-link button is-normal is-rounded is-dark">
+                  <span class="icon">
+                    <i class="ai ai-arxiv"></i>
+                  </span>
+                  <span>arXiv</span>
+                </a>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Teaser video-->
+<!-- <section class="hero teaser">
+  <div class="container is-max-desktop">
+    <div class="hero-body">
+      <video poster="" id="tree" autoplay controls muted loop height="100%">
+        <source src="static/videos/banner_video.mp4"
+        type="video/mp4">
+      </video>
+      <h2 class="subtitle has-text-centered">
+        Aliquam vitae elit ullamcorper tellus egestas pellentesque. Ut lacus tellus, maximus vel lectus at, placerat pretium mi. Maecenas dignissim tincidunt vestibulum. Sed consequat hendrerit nisl ut maximus. 
+      </h2>
+    </div>
+  </div>
+</section> -->
+<!-- End teaser video -->
+
+<section class="hero teaser">
+  <div class="grid-container">
+    <div class="grid-item">
+      <img class="zoom sample-subfig" src="static/images/damaged input.jpg" alt="Sample image" data-magnify-src="static/images/damaged input.jpg">
+      <figcaption><b>Input:</b> 4K film scan with authentic damage (hairs and dirt)</figcaption>
+    </div>
+  
+    <div class="grid-item">
+      <img class="zoom sample-subfig" src="static/images/our_mask.png" alt="Sample image" data-magnify-src="static/images/our_mask.png">
+      <figcaption><b>Segmentation:</b> prediction from our U-Net trained on synthetically damaged data.</figcaption>
+    </div>
+
+    <div class="grid-item">
+      <img class="zoom sample-subfig" src="static/images/restoreation_bopbtl_our_masks_no_patches.png" alt="Sample image" data-magnify-src="static/images/restoreation_bopbtl_our_masks_no_patches.png">
+      <figcaption><b>Restoration by BOPB <a href="http://raywzy.com/Old_Photo/" target="_blank">[WZC*20]</a>:</b> using our predicted segmentation.</figcaption>
+    </div>
+ 
+    <div class="grid-item">
+      <img class="zoom sample-subfig" src="static/images/restoration_unet_retrained.jpg" alt="Sample image" data-magnify-src="static/images/restoration_unet_retrained.jpg">
+      <figcaption><b>Restoration by U-Net <a href="https://eprints.gla.ac.uk/259748/2/259748.pdf" target="_blank">[ISW22]</a>:</b> retrained on our synthetic damage.</figcaption>
+    </div>
+  
+    <div class="grid-item">
+      <img class="zoom sample-subfig" src="static/images/restoration_lama.png" alt="Sample image" data-magnify-src="static/images/restoration_lama.png">
+      <figcaption><b>Restoration by LaMa <a href="https://advimman.github.io/lama-project/" target="_blank">[SLM*22]</a>:</b> best performing model, using our predicted segmentation.</figcaption>
+    </div>
+
+    <div class="grid-item">
+      <img class="zoom sample-subfig" src="static/images/restoration_gt.jpg" alt="Sample image" data-magnify-src="static/images/restoration_gt.jpg">
+      <figcaption><b>Ground Truth:</b> manually restored in Photoshop by a human expert</figcaption>
+    </div>
+  </div>
+  <div class="container text-padding is-size-6"><figcaption>Input and ground truth from our authentic artefact damage dataset, along with restorations from some of the models we evaluated,
+    presented at full resolution. Mouse over to zoom in.</figcaption></div>
+</section>
+
+<!-- Paper abstract -->
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <h2 class="title is-3">Abstract</h2>
+        <div class="content has-text-justified is-size-6">
+          <p>Digital scans of analogue photographic film typically contain artefacts
+            such as dust and scratches. Automated removal of these is an important 
+            part of preservation and dissemination of photographs of historical 
+            and cultural importance.</p>
+          <p>While state-of-the-art deep learning models have shown impressive 
+            results in general image inpainting and denoising, film artefact 
+            removal is an understudied problem. It has particularly challenging 
+            requirements, due to the complex nature of analogue damage, the high 
+            resolution of film scans, and potential ambiguities in the restoration. 
+            There are no publicly available high-quality datasets of real-world analogue 
+            film damage for training and evaluation, making quantitative studies impossible.</p>
+          <p>We address the lack of ground-truth data for evaluation by collecting 
+            a dataset of 4K damaged analogue film scans paired with manually-restored 
+            versions produced by a human expert, allowing quantitative evaluation of 
+            restoration performance. We construct a larger synthetic dataset of damaged images with 
+            paired clean versions using a statistical model of artefact shape and 
+            occurrence learnt from real, heavily-damaged images. We carefully 
+            validate the realism of the simulated damage via a human perceptual 
+            study, showing that even expert users find our synthetic damage 
+            indistinguishable from real. In addition, we demonstrate that 
+            training with our synthetically damaged dataset leads to improved 
+            artefact segmentation performance when compared to previously 
+            proposed synthetic analogue damage.</p>
+          <p>Finally, we use these datasets to train and analyse the performance of eight state-of-the-art image restoration methods on high-resolution scans. We compare both methods which directly perform the restoration task on scans with artefacts, and methods which require a damage mask to be provided for the inpainting of artefacts. 
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End paper abstract -->
+
+
+<!-- Dataset 1 -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">FILM-R: Film Image Library with Manual Restorations</h2>
+      <span>
+        <div class="is-size-4"><a href="https://doi.org/10.6084/m9.figshare.21803304" target="_blank">[DATASET]</a></div> 
+      </span>
+       
+      <div class="slider-grid-container">
+        <div class="slider-grid-item">
+          <figure class="cd-image-container">
+            <img src="static/images/restoration_gt.jpg" alt="Manually restored scan">
+            <span class="cd-image-label" style="color: rgb(0, 0, 0);" data-type="original">Restored</span>
+        
+            <div class="cd-resize-img"> <!-- the resizable image on top -->
+              <img src="static/images/damaged input.jpg" alt="Damaged scan">
+              <span class="cd-image-label" style="color: rgb(0, 0, 0);" data-type="modified">Damaged</span>
+            </div>
+        
+            <span class="cd-handle"></span>
+          </figure>
+        </div>
+        <div class="slider-grid-item">
+          <figure class="cd-image-container">
+            <img src="static/images/target_cinestill50d_half_1.jpg" alt="Manually restored scan">
+            <span class="cd-image-label" data-type="original">Restored</span>
+        
+            <div class="cd-resize-img"> <!-- the resizable image on top -->
+              <img src="static/images/input_cinestill50d_half_1.jpg" alt="Damaged scan">
+              <span class="cd-image-label" data-type="modified">Damaged</span>
+            </div>
+        
+            <span class="cd-handle"></span>
+          </figure>
+        </div>
+        <div class="slider-grid-item">
+          <figure class="cd-image-container">
+            <img src="static/images/target_cinestill800t_half_1.jpg" alt="Manually restored scan">
+            <span class="cd-image-label" data-type="original">Restored</span>
+        
+            <div class="cd-resize-img"> <!-- the resizable image on top -->
+              <img src="static/images/input_cinestill800t_half_1.jpg" alt="Damaged scan">
+              <span class="cd-image-label" data-type="modified">Damaged</span>
+            </div>
+        
+            <span class="cd-handle"></span>
+          </figure>
+        </div>
+        <div class="slider-grid-item">
+          <figure class="cd-image-container">
+            <img src="static/images/target_cinestill800t_half_5.jpg" alt="Manually restored scan">
+            <span class="cd-image-label" data-type="original" style="color: rgb(0, 0, 0);">Restored</span>
+        
+            <div class="cd-resize-img"> <!-- the resizable image on top -->
+              <img src="static/images/input_cinestill800t_half_5.jpg" alt="Damaged scan">
+              <span class="cd-image-label" data-type="modified" style="color: rgb(0, 0, 0);">Damaged</span>
+            </div>
+            <span class="cd-handle"></span>
+          </figure>
+        </div>
+      </div>
+    </div>
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified is-size-6">
+          <p>We collected 44 scans of 35mm film of a variety of colour emulsions, 
+            including slides and negatives. Damage includes dust, scratches, hairs, 
+            and specks. For each damaged scan, a complimentary restored version is provided, 
+            where analogue artifacts have been manually restored by an expert. This dataset is used
+            to evaluate existing damage detection and restoration methods.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End -->
+
+
+
+
+<!-- Dataset 2 -->
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">FILM-AA: Film Image Library with Manual Artefact Annotations</h2>
+      <span>
+        <div class="is-size-4"><a href="https://doi.org/10.6084/m9.figshare.21803292" target="_blank">[DATASET]</a></div> 
+        <br>
+      </span>
+      <div class="is-size-5">
+        <form action="" id="damage-types">
+          <input type="radio" id="Dust" name="damage" value="Dust" onClick="changeSrc()">Dust
+          <input type="radio" id="Dirt" name="damage" value="Dirt" onClick="changeSrc()">Dirt
+          <input type="radio" id="Long hairs" name="damage" value="Long hairs" onClick="changeSrc()">Long hairs
+          <input type="radio" id="Short hairs" name="damage" value="Short hairs" onClick="changeSrc()">Short hairs
+          <input type="radio" id="Scratches" name="damage" value="Scratches" onClick="changeSrc()">Scratches
+          <input type="radio" id="All" name="damage" value="All" onClick="changeSrc()", checked="checked">All
+          <input type="radio" id="None" name="damage" value="None" onClick="changeSrc()">None
+        </form>
+      </div>
+
+      <img id="scan" class="zoom sample-subfig" src="static/images/scan2.png" alt="Sample image" data-magnify-src="static/images/scan2.png">
+      <script>
+          function changeSrc() {
+            if ($("#Dust").is(":checked")) {
+              $("#scan").attr("src", "static/images/scan2-dust.png");
+              $("#scan").attr("data-magnify-src", "static/images/scan2-dust.png");
+            } else if ($("#Dirt").is(":checked")) {
+              $("#scan").attr("src", "static/images/scan2-dirt.png");
+              $("#scan").attr("data-magnify-src", "static/images/scan2-dirt.png");
+            } else if ($("#Scratches").is(":checked")) {
+              $("#scan").attr("src", "static/images/scan2-scratch.png");
+              $("#scan").attr("data-magnify-src", "static/images/scan2-scratch.png");
+            } else if ($("#Long_hairs").is(":checked")) {
+              $("#scan").attr("src", "static/images/scan2-long-hair.png");
+              $("#scan").attr("data-magnify-src", "static/images/scan2-long-hair.png");
+            } else if ($("#Short_hairs").is(":checked")) {
+              $("#scan").attr("src", "static/images/scan2-short-hair.png");
+              $("#scan").attr("data-magnify-src", "static/images/scan2-short-hair.png");
+            } else if ($("#All").is(":checked")) {
+              $("#scan").attr("src", "static/images/scan2.png");
+              $("#scan").attr("data-magnify-src", "static/images/scan2.png");
+            } else if ($("#None").is(":checked")) {
+              $("#scan").attr("src", "static/images/scan.jpg");
+              $("#scan").attr("data-magnify-src", "static/images/scan.jpg");
+            }
+            $('.zoom').magnify(); 
+          }
+
+      </script>
+      </div>
+    </div>
+    <div class="columns is-centered has-text-centered">
+      <div class="column is-four-fifths">
+        <div class="content has-text-justified is-size-6">
+          <p>We manually annotate individual artifacts in the scans with
+            bounding polygons, and classify each as dirt, dust, long hair, 
+            short hair or scratch. We extract each individual artifact,
+             zero padded to square, to create a bank of isolated artifacts 
+             to sample from when generating new overlays. In addition, we use these
+             artefacts to create a statistical model of analogue damage in terms of
+             size, shape, and spatial distribution. In total we have
+              annotated 12135 artifacts across the 10 scanned frames.
+               Annotations for each scan are included in JSON format, and
+                can easily be converted to OpenCV contour format.</p>
+                <br>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- End -->
+
+<!-- Segmentation results -->
+<section class="hero is-small">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Damage Segmentation Task</h2>
+      
+      <div class="slider-grid-container">
+        <div class="slider-grid-item">
+          <figure class="cd-image-container">
+            <img src="static/images/our_mask.png" alt="Segmentation">
+            <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="original">Segmentation</span>
+        
+            <div class="cd-resize-img"> <!-- the resizable image on top -->
+              <img src="static/images/damaged input.jpg" alt="Damaged Input">
+              <span class="cd-image-label" style="color: rgb(0, 0, 0);" data-type="modified">Damaged</span>
+            </div>
+
+            <span class="cd-handle"></span>
+          </figure><br>
+          <figcaption><b>Segmentation</b> from U-Net trained on our synthetically damaged data.</figcaption>
+
+        </div>
+        <div class="slider-grid-item">
+          <figure class="cd-image-container">
+            <img src="static/images/bopbtl_mask.png" alt="Segmentation">
+            <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="original">Segmentation</span>
+        
+            <div class="cd-resize-img"> <!-- the resizable image on top -->
+              <img src="static/images/damaged input.jpg" alt="Damaged Input">
+              <span class="cd-image-label" style="color: rgb(0, 0, 0);" data-type="modified">Damaged</span>
+            </div>
+        
+            <span class="cd-handle"></span>
+
+          </figure><br>
+          <figcaption><b>Segmentation</b> by BOPB <a href="http://raywzy.com/Old_Photo/" target="_blank">[WZC*20]</a>.</figcaption>
+
+        </div>
+        <div class="slider-grid-item">
+          <figure class="cd-image-container">
+            <img src="static/images/segmentation-deepremaster-velvia50_0.png" alt="Segmentation">
+            <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="original">Segmentation</span>
+        
+            <div class="cd-resize-img"> <!-- the resizable image on top -->
+              <img src="static/images/damaged input.jpg" alt="Damaged Input">
+              <span class="cd-image-label" style="color: rgb(0, 0, 0);" data-type="modified">Damaged</span>
+            </div>
+        
+            <span class="cd-handle"></span>
+          </figure><br>
+          <figcaption><b>Segmentation</b> from U-Net trained on damage overlays by DeepRemaster <a href="http://iizuka.cs.tsukuba.ac.jp/projects/remastering/en/index.html" target="_blank">[ISS19]</a>.</figcaption>
+
+        </div>
+        <div class="slider-grid-item">
+          <figure class="cd-image-container">
+            <img src="static/images/thresholded-velvia50_0.jpg" alt="Segmentation">
+            <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="original">Segmentation</span>
+        
+            <div class="cd-resize-img"> <!-- the resizable image on top -->
+              <img src="static/images/damaged input.jpg" alt="Damaged Input">
+              <span class="cd-image-label" style="color: rgb(0, 0, 0);" data-type="modified">Damaged</span>
+            </div>
+        
+            <span class="cd-handle"></span>
+
+          </figure><br>
+          <figcaption><b>Approximate ground truth:</b> binarised difference of damaged and manually restored scans.</figcaption>
+
+        </div>
+
+      </div>
+      <div class="container text-padding is-size-6"><figcaption>Qualitative comparison of segmentations of artefacts from our authentic damage dataset.</figcaption></div>
+
+      <dl id="accordion" class="Zebra_Accordion">
+        <dt title="Toggle section">More examples</dt>
+        <dd>
+          <div class="slider-grid-container">
+            <div class="slider-grid-item">
+              <figure class="cd-image-container">
+                <img src="static/images/cinestill50d_half_1_mask.png" alt="Segmentation">
+                <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="original">Segmentation</span>
+            
+                <div class="cd-resize-img"> <!-- the resizable image on top -->
+                  <img src="static/images/input_cinestill50d_half_1.jpg" alt="Damaged Input">
+                  <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="modified">Damaged</span>
+                </div>
+    
+                <span class="cd-handle"></span>
+              </figure><br>
+              <figcaption><b>Segmentation</b> from U-Net trained on our synthetically damaged data.</figcaption>
+    
+            </div>
+            <div class="slider-grid-item">
+              <figure class="cd-image-container">
+                <img src="static/images/bopb_mask_cinestill50d_half_1.png" alt="Segmentation">
+                <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="original">Segmentation</span>
+            
+                <div class="cd-resize-img"> <!-- the resizable image on top -->
+                  <img src="static/images/input_cinestill50d_half_1.jpg" alt="Damaged Input">
+                  <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="modified">Damaged</span>
+                </div>
+            
+                <span class="cd-handle"></span>
+    
+              </figure><br>
+              <figcaption><b>Segmentation</b> by BOPB <a href="http://raywzy.com/Old_Photo/" target="_blank">[WZC*20]</a>.</figcaption>
+    
+            </div>
+            <div class="slider-grid-item">
+              <figure class="cd-image-container">
+                <img src="static/images/segmentation-deepremaster-cinestill50d_1.png" alt="Segmentation">
+                <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="original">Segmentation</span>
+            
+                <div class="cd-resize-img"> <!-- the resizable image on top -->
+                  <img src="static/images/input_cinestill50d_half_1.jpg" alt="Damaged Input">
+                  <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="modified">Damaged</span>
+                </div>
+            
+                <span class="cd-handle"></span>
+              </figure><br>
+              <figcaption><b>Segmentation</b> from U-Net trained on damage overlays by DeepRemaster <a href="http://iizuka.cs.tsukuba.ac.jp/projects/remastering/en/index.html" target="_blank">[ISS19]</a>.</figcaption>
+    
+            </div>
+            <div class="slider-grid-item">
+              <figure class="cd-image-container">
+                <img src="static/images/thresholded_cinestill50d_1.jpg" alt="Segmentation">
+                <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="original">Segmentation</span>
+            
+                <div class="cd-resize-img"> <!-- the resizable image on top -->
+                  <img src="static/images/input_cinestill50d_half_1.jpg" alt="Damaged Input">
+                  <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="modified">Damaged</span>
+                </div>
+            
+                <span class="cd-handle"></span>
+    
+              </figure><br>
+              <figcaption><b>Approximate ground truth:</b> binarised difference of damaged and manually restored scans.</figcaption>
+    
+            </div>
+          </div>
+          
+
+          <div class="slider-grid-container">
+            <div class="slider-grid-item">
+              <figure class="cd-image-container">
+                <img src="static/images/cinestill800t_half_1_mask.png" alt="Segmentation">
+                <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="original">Segmentation</span>
+            
+                <div class="cd-resize-img"> <!-- the resizable image on top -->
+                  <img src="static/images/input_cinestill800t_half_1.jpg" alt="Damaged Input">
+                  <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="modified">Damaged</span>
+                </div>
+    
+                <span class="cd-handle"></span>
+              </figure><br>
+              <figcaption><b>Segmentation</b> from U-Net trained on our synthetically damaged data.</figcaption>
+    
+            </div>
+            <div class="slider-grid-item">
+              <figure class="cd-image-container">
+                <img src="static/images/bopb_mask_cinestill800t_half_1.png" alt="Segmentation">
+                <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="original">Segmentation</span>
+            
+                <div class="cd-resize-img"> <!-- the resizable image on top -->
+                  <img src="static/images/input_cinestill800t_half_1.jpg" alt="Damaged Input">
+                  <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="modified">Damaged</span>
+                </div>
+            
+                <span class="cd-handle"></span>
+    
+              </figure><br>
+              <figcaption><b>Segmentation</b> by BOPB <a href="http://raywzy.com/Old_Photo/" target="_blank">[WZC*20]</a>.</figcaption>
+    
+            </div>
+            <div class="slider-grid-item">
+              <figure class="cd-image-container">
+                <img src="static/images/segmentation-deepremaster-cinestill800_half_1.png" alt="Segmentation">
+                <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="original">Segmentation</span>
+            
+                <div class="cd-resize-img"> <!-- the resizable image on top -->
+                  <img src="static/images/input_cinestill800t_half_1.jpg" alt="Damaged Input">
+                  <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="modified">Damaged</span>
+                </div>
+            
+                <span class="cd-handle"></span>
+              </figure><br>
+              <figcaption><b>Segmentation</b> from U-Net trained on damage overlays by DeepRemaster <a href="http://iizuka.cs.tsukuba.ac.jp/projects/remastering/en/index.html" target="_blank">[ISS19]</a>.</figcaption>
+    
+            </div>
+            <div class="slider-grid-item">
+              <figure class="cd-image-container">
+                <img src="static/images/thresholded_cinestill800_half_1.jpg" alt="Segmentation">
+                <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="original">Segmentation</span>
+            
+                <div class="cd-resize-img"> <!-- the resizable image on top -->
+                  <img src="static/images/input_cinestill800t_half_1.jpg" alt="Damaged Input">
+                  <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="modified">Damaged</span>
+                </div>
+            
+                <span class="cd-handle"></span>
+    
+              </figure><br>
+              <figcaption><b>Approximate ground truth:</b> binarised difference of damaged and manually restored scans.</figcaption>
+    
+            </div>
+          </div>
+
+
+          <div class="slider-grid-container">
+            <div class="slider-grid-item">
+              <figure class="cd-image-container">
+                <img src="static/images/cinestill800t_half_5_mask.png" alt="Segmentation">
+                <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="original">Segmentation</span>
+            
+                <div class="cd-resize-img"> <!-- the resizable image on top -->
+                  <img src="static/images/input_cinestill800t_half_5.jpg" alt="Damaged Input">
+                  <span class="cd-image-label" style="color: rgb(0, 0, 0);" data-type="modified">Damaged</span>
+                </div>
+    
+                <span class="cd-handle"></span>
+              </figure><br>
+              <figcaption><b>Segmentation</b> from U-Net trained on our synthetically damaged data.</figcaption>
+    
+            </div>
+            <div class="slider-grid-item">
+              <figure class="cd-image-container">
+                <img src="static/images/bopb_mask_cinestill800t_half_5.png" alt="Segmentation">
+                <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="original">Segmentation</span>
+            
+                <div class="cd-resize-img"> <!-- the resizable image on top -->
+                  <img src="static/images/input_cinestill800t_half_5.jpg" alt="Damaged Input">
+                  <span class="cd-image-label" style="color: rgb(0, 0, 0);" data-type="modified">Damaged</span>
+                </div>
+            
+                <span class="cd-handle"></span>
+    
+              </figure><br>
+              <figcaption><b>Segmentation</b> by BOPB <a href="http://raywzy.com/Old_Photo/" target="_blank">[WZC*20]</a>.</figcaption>
+    
+            </div>
+            <div class="slider-grid-item">
+              <figure class="cd-image-container">
+                <img src="static/images/segmentation-deepremaster-cinestill800_5.png" alt="Segmentation">
+                <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="original">Segmentation</span>
+            
+                <div class="cd-resize-img"> <!-- the resizable image on top -->
+                  <img src="static/images/input_cinestill800t_half_5.jpg" alt="Damaged Input">
+                  <span class="cd-image-label" style="color: rgb(0, 0, 0);" data-type="modified">Damaged</span>
+                </div>
+            
+                <span class="cd-handle"></span>
+              </figure><br>
+              <figcaption><b>Segmentation</b> from U-Net trained on damage overlays by DeepRemaster <a href="http://iizuka.cs.tsukuba.ac.jp/projects/remastering/en/index.html" target="_blank">[ISS19]</a>.</figcaption>
+    
+            </div>
+            <div class="slider-grid-item">
+              <figure class="cd-image-container">
+                <img src="static/images/thresholded_cinestill800_5.jpg" alt="Segmentation">
+                <span class="cd-image-label" style="color: rgb(255, 255, 255);" data-type="original">Segmentation</span>
+            
+                <div class="cd-resize-img"> <!-- the resizable image on top -->
+                  <img src="static/images/input_cinestill800t_half_5.jpg" alt="Damaged Input">
+                  <span class="cd-image-label" style="color: rgb(0, 0, 0);" data-type="modified">Damaged</span>
+                </div>
+            
+                <span class="cd-handle"></span>
+    
+              </figure><br>
+              <figcaption><b>Approximate ground truth:</b> binarised difference of damaged and manually restored scans.</figcaption>
+    
+            </div>
+          </div>
+
+        </dd>
+      </dl>
+      
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="hero is-small is-light">
+  <div class="hero-body">
+    <div class="container">
+      <h2 class="title is-3">Damage Restoration Task</h2>
+      <div class="grid-container">
+        <div class="grid-item">
+          <img class="zoom sample-subfig" src="static/images/damaged input.jpg" alt="Sample image" data-magnify-src="static/images/damaged input.jpg">
+          <figcaption><b>Input:</b> 4K film scan with authentic damage (hairs and dirt)</figcaption>
+        </div>
+      
+        <div class="grid-item">
+          <img class="zoom sample-subfig" src="static/images/our_mask.png" alt="Sample image" data-magnify-src="static/images/our_mask.png">
+          <figcaption><b>Segmentation from our U-Net </b> trained on synthetically damaged data.</figcaption>
+        </div>
+    
+        <div class="grid-item">
+          <img class="zoom sample-subfig" src="static/images/bopbtl_mask.png" alt="Sample image" data-magnify-src="static/images/bopbtl_mask.png">
+          <figcaption><b>Segmentationby BOPB <a href="http://raywzy.com/Old_Photo/" target="_blank">[WZC*20]</a>.</b></figcaption>
+        </div>
+     
+        <div class="grid-item">
+          <img class="zoom sample-subfig" src="static/images/restoration_unet.jpg" alt="Sample image" data-magnify-src="static/images/restoration_unet.jpg">
+          <figcaption><b>Restoration by U-Net <a href="https://eprints.gla.ac.uk/259748/2/259748.pdf" target="_blank">[ISW22]</a>:</b> using originally provided model weights.</figcaption>
+        </div>
+      
+        <div class="grid-item">
+          <img class="zoom sample-subfig" src="static/images/restoreation_bopbtl_our_masks_no_patches.png" alt="Sample image" data-magnify-src="static/images/restoreation_bopbtl_our_masks_no_patches.png">
+          <figcaption><b>Restoration by BOPB <a href="http://raywzy.com/Old_Photo/" target="_blank">[WZC*20]</a>:</b> using our predicted segmentation.</figcaption>
+        </div>
+    
+        <div class="grid-item">
+          <img class="zoom sample-subfig" src="static/images/restoration_bopbtl_no_patches.png" alt="Sample image" data-magnify-src="static/images/restoration_bopbtl_no_patches.png">
+          <figcaption><b>Restoration by BOPB <a href="http://raywzy.com/Old_Photo/" target="_blank">[WZC*20]</a>:</b> using their predicted segmentation.</figcaption>
+        </div>
+
+        <div class="grid-item">
+          <img class="zoom sample-subfig" src="static/images/restoration_unet_retrained.jpg" alt="Sample image" data-magnify-src="static/images/restoration_unet_retrained.jpg">
+          <figcaption><b>Restoration by U-Net <a href="https://eprints.gla.ac.uk/259748/2/259748.pdf" target="_blank">[ISW22]</a>:</b> retrained on our synthetic damage.</figcaption>
+        </div>
+      
+        <div class="grid-item">
+          <img class="zoom sample-subfig" src="static/images/restoration_lama.png" alt="Sample image" data-magnify-src="static/images/restoration_lama.png">
+          <figcaption><b>Restoration by LaMa <a href="https://advimman.github.io/lama-project/" target="_blank">[SLM*22]</a>:</b> best performing model, using our predicted segmentation.</figcaption>
+        </div>
+    
+        <div class="grid-item">
+          <img class="zoom sample-subfig" src="static/images/restoration_stable_diffusion.jpg" alt="Sample image" data-magnify-src="static/images/restoration_stable_diffusion.jpg">
+          <figcaption><b>Restoration by Stable Diffusion <a href="https://ommer-lab.com/research/latent-diffusion-models/" target="_blank">[RBL*21]</a>:</b> using our predicted segmentation.</figcaption>
+        </div>
+     
+        <div class="grid-item">
+          <img class="zoom sample-subfig" src="static/images/restoration_blind_motif.jpg" alt="Sample image" data-magnify-src="static/images/restoration_blind_motif.jpg">
+          <figcaption><b>Restoration by BVMR <a href="https://github.com/amirhertz/visual_motif_removal" target="_blank">[ISW22]</a>:</b>retrained on our synthetic damage.</figcaption>
+        </div>
+      
+        <div class="grid-item">
+          <img class="zoom sample-subfig" src="static/images/restoration_repaint.jpg" alt="Sample image" data-magnify-src="static/images/restoration_repaint.jpg">
+          <figcaption><b>Restoration by RePaint <a href="https://github.com/andreas128/RePaint" target="_blank">[LDR*22]</a>:</b> using our predicted segmentation.</figcaption>
+        </div>
+    
+        <div class="grid-item">
+          <img class="zoom sample-subfig" src="static/images/restoration_gt.jpg" alt="Sample image" data-magnify-src="static/images/restoration_gt.jpg">
+          <figcaption><b>Ground Truth:</b> manually restored in Photoshop by a human expert</figcaption>
+        </div>
+      </div>
+      <div class="container has-text-justified text-padding is-size-6"><figcaption>Input and ground truth from our authentic artefact damage dataset, along with restorations from some of the models we evaluated,
+        presented at full resolution. Mouse over to zoom in.</figcaption></div>
+      
+        <dl id="accordion2" class="Zebra_Accordion">
+          <dt title="Toggle section">More examples</dt>
+            <dd>
+              <div class="grid-container">
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/input_cinestill50d_half_1.jpg" alt="Sample image" data-magnify-src="static/images/input_cinestill50d_half_1.jpg">
+                  <figcaption><b>Input:</b> 4K film scan with authentic damage (hairs and dirt)</figcaption>
+                </div>
+              
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/cinestill50d_half_1_mask.png" alt="Sample image" data-magnify-src="static/images/cinestill50d_half_1_mask.png">
+                  <figcaption><b>Segmentation from our U-Net </b> trained on synthetically damaged data.</figcaption>
+                </div>
+            
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/bopb_mask_cinestill50d_half_1.png" alt="Sample image" data-magnify-src="static/images/bopb_mask_cinestill50d_half_1.png">
+                  <figcaption><b>Segmentationby BOPB <a href="http://raywzy.com/Old_Photo/" target="_blank">[WZC*20]</a>.</b></figcaption>
+                </div>
+             
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/unet_cinestill50d_half_1.jpg" alt="Sample image" data-magnify-src="static/images/unet_cinestill50d_half_1.jpg">
+                  <figcaption><b>Restoration by U-Net <a href="https://eprints.gla.ac.uk/259748/2/259748.pdf" target="_blank">[ISW22]</a>:</b> using originally provided model weights.</figcaption>
+                </div>
+              
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/bopb_our_masks_no_patches_cinestill50d_half_1.jpg" alt="Sample image" data-magnify-src="static/images/bopb_our_masks_no_patches_cinestill50d_half_1.jpg">
+                  <figcaption><b>Restoration by BOPB <a href="http://raywzy.com/Old_Photo/" target="_blank">[WZC*20]</a>:</b> using our predicted segmentation.</figcaption>
+                </div>
+            
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/bobp_no_patches_cinestill50d_half_1.jpg" alt="Sample image" data-magnify-src="static/images/bobp_no_patches_cinestill50d_half_1.jpg">
+                  <figcaption><b>Restoration by BOPB <a href="http://raywzy.com/Old_Photo/" target="_blank">[WZC*20]</a>:</b> using their predicted segmentation.</figcaption>
+                </div>
+        
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/unet_retrained_cinestill50d_half_1.jpg" alt="Sample image" data-magnify-src="static/images/unet_retrained_cinestill50d_half_1.jpg">
+                  <figcaption><b>Restoration by U-Net <a href="https://eprints.gla.ac.uk/259748/2/259748.pdf" target="_blank">[ISW22]</a>:</b> retrained on our synthetic damage.</figcaption>
+                </div>
+              
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/lama_cinestill50d_half_1_mask.jpg" alt="Sample image" data-magnify-src="static/images/lama_cinestill50d_half_1_mask.jpg">
+                  <figcaption><b>Restoration by LaMa <a href="https://advimman.github.io/lama-project/" target="_blank">[SLM*22]</a>:</b> best performing model, using our predicted segmentation.</figcaption>
+                </div>
+            
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/stable_diffusion_cinestill50d_half_1.jpg" alt="Sample image" data-magnify-src="static/images/stable_diffusion_cinestill50d_half_1.jpg">
+                  <figcaption><b>Restoration by Stable Diffusion <a href="https://ommer-lab.com/research/latent-diffusion-models/" target="_blank">[RBL*21]</a>:</b> using our predicted segmentation.</figcaption>
+                </div>
+             
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/visual_motif_cinestill50d_half_1.jpg" alt="Sample image" data-magnify-src="static/images/visual_motif_cinestill50d_half_1.jpg">
+                  <figcaption><b>Restoration by BVMR <a href="https://github.com/amirhertz/visual_motif_removal" target="_blank">[ISW22]</a>:</b>retrained on our synthetic damage.</figcaption>
+                </div>
+              
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/repaint_cinestill50d_half_1.jpg" alt="Sample image" data-magnify-src="static/images/repaint_cinestill50d_half_1.jpg">
+                  <figcaption><b>Restoration by RePaint <a href="https://github.com/andreas128/RePaint" target="_blank">[LDR*22]</a>:</b> using our predicted segmentation.</figcaption>
+                </div>
+            
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/target_cinestill50d_half_1.jpg" alt="Sample image" data-magnify-src="static/images/target_cinestill50d_half_1.jpg">
+                  <figcaption><b>Ground Truth:</b> manually restored in Photoshop by a human expert</figcaption>
+                </div>
+              </div>
+
+
+              <div class="grid-container">
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/input_cinestill800t_half_1.jpg" alt="Sample image" data-magnify-src="static/images/input_cinestill800t_half_1.jpg">
+                  <figcaption><b>Input:</b> 4K film scan with authentic damage (hairs and dirt)</figcaption>
+                </div>
+              
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/cinestill800t_half_1_mask.png" alt="Sample image" data-magnify-src="static/images/cinestill800t_half_1_mask.png">
+                  <figcaption><b>Segmentation from our U-Net </b> trained on synthetically damaged data.</figcaption>
+                </div>
+            
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/bopb_mask_cinestill800t_half_1.png" alt="Sample image" data-magnify-src="static/images/bopb_mask_cinestill800t_half_1.png">
+                  <figcaption><b>Segmentationby BOPB <a href="http://raywzy.com/Old_Photo/" target="_blank">[WZC*20]</a>.</b></figcaption>
+                </div>
+             
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/unet_cinestill800t_half_1.jpg" alt="Sample image" data-magnify-src="static/images/unet_cinestill800t_half_1.jpg">
+                  <figcaption><b>Restoration by U-Net <a href="https://eprints.gla.ac.uk/259748/2/259748.pdf" target="_blank">[ISW22]</a>:</b> using originally provided model weights.</figcaption>
+                </div>
+              
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/bopb_our_masks_no_patches_cinestill800t_half_1.jpg" alt="Sample image" data-magnify-src="static/images/bopb_our_masks_no_patches_cinestill800t_half_1.jpg">
+                  <figcaption><b>Restoration by BOPB <a href="http://raywzy.com/Old_Photo/" target="_blank">[WZC*20]</a>:</b> using our predicted segmentation.</figcaption>
+                </div>
+            
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/bobp_no_patches_cinestill800t_half_1.jpg" alt="Sample image" data-magnify-src="static/images/bobp_no_patches_cinestill800t_half_1.jpg">
+                  <figcaption><b>Restoration by BOPB <a href="http://raywzy.com/Old_Photo/" target="_blank">[WZC*20]</a>:</b> using their predicted segmentation.</figcaption>
+                </div>
+        
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/unet_retrained_cinestill800t_half_1.jpg" alt="Sample image" data-magnify-src="static/images/unet_retrained_cinestill800t_half_1.jpg">
+                  <figcaption><b>Restoration by U-Net <a href="https://eprints.gla.ac.uk/259748/2/259748.pdf" target="_blank">[ISW22]</a>:</b> retrained on our synthetic damage.</figcaption>
+                </div>
+              
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/lama_cinestill800t_half_1_mask.jpg" alt="Sample image" data-magnify-src="static/images/lama_cinestill800t_half_1_mask.jpg">
+                  <figcaption><b>Restoration by LaMa <a href="https://advimman.github.io/lama-project/" target="_blank">[SLM*22]</a>:</b> best performing model, using our predicted segmentation.</figcaption>
+                </div>
+            
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/stable_diffusion_cinestill800t_half_1.jpg" alt="Sample image" data-magnify-src="static/images/stable_diffusion_cinestill800t_half_1.jpg">
+                  <figcaption><b>Restoration by Stable Diffusion <a href="https://ommer-lab.com/research/latent-diffusion-models/" target="_blank">[RBL*21]</a>:</b> using our predicted segmentation.</figcaption>
+                </div>
+             
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/visual_motif_cinestill800t_half_1.jpg" alt="Sample image" data-magnify-src="static/images/visual_motif_cinestill800t_half_1.jpg">
+                  <figcaption><b>Restoration by BVMR <a href="https://github.com/amirhertz/visual_motif_removal" target="_blank">[ISW22]</a>:</b>retrained on our synthetic damage.</figcaption>
+                </div>
+              
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/repaint_cinestill800t_half_1.jpg" alt="Sample image" data-magnify-src="static/images/repaint_cinestill800t_half_1.jpg">
+                  <figcaption><b>Restoration by RePaint <a href="https://github.com/andreas128/RePaint" target="_blank">[LDR*22]</a>:</b> using our predicted segmentation.</figcaption>
+                </div>
+            
+                <div class="grid-item">
+                  <img class="zoom sample-subfig" src="static/images/target_cinestill800t_half_1.jpg" alt="Sample image" data-magnify-src="static/images/target_cinestill800t_half_1.jpg">
+                  <figcaption><b>Ground Truth:</b> manually restored in Photoshop by a human expert</figcaption>
+                </div>
+              </div>
+            </dd>
+        </dl>
+    </div>
+  </div>
+</section>
+
+
+
+<!--BibTex citation -->
+  <section class="section" id="BibTeX">
+    <div class="container is-max-desktop content">
+      <h2 class="title">BibTeX</h2>
+      <pre><code>@misc{https://doi.org/10.48550/arxiv.2302.10004,
+        doi = {10.48550/ARXIV.2302.10004},
+        url = {https://arxiv.org/abs/2302.10004},
+        author = {Ivanova, Daniela and Williamson, John and Henderson, Paul},
+        title = {Simulating analogue film damage to analyse and improve artefact restoration on high-resolution scans},
+        publisher = {arXiv},
+        year = {2023},
+        copyright = {Creative Commons Attribution 4.0 International}
+      }
+      </code></pre>
+    </div>
+</section>
+<!--End BibTex citation -->
+
+
+  <footer class="footer">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-8">
+        <div class="content">
+
+          <p>
+            This page was built using the <a href="https://github.com/eliahuhorwitz/Academic-project-page-template" target="_blank">Academic Project Page Template</a>.
+          </p>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+<!--[if lt IE 9]>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<![endif]-->
+<!--[if IE 9]><!-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <!--<![endif]-->
+  <script src="static/js/jquery.magnify.js"></script>
+  <script src="https://cdn.rawgit.com/stefangabos/Zebra_Accordion/b999e40c/dist/zebra_accordion.min.js"></script>
+  <script>
+  var $zoom;
+  $(document).ready(function() {
+    // Initiate accordion
+    new $.Zebra_Accordion($('#accordion'), {
+      'collapsible':  true,
+      'show': false,
+    });
+    new $.Zebra_Accordion($('#accordion2'), {
+      'collapsible':  true,
+      'show': false,
+    });
+    // Initiate magnification powers
+    $zoom = $('.zoom').magnify({
+        afterLoad: function() {
+          console.log('Magnification powers activated!');
+        }
+      });
+  });
+  $('button').click(function() {
+    $zoom.destroy();
+  });
+  $('html').on({
+    magnifystart: function() {
+      console.log('\'magnifystart\' event fired');
+    },
+    magnifyend: function() {
+      console.log('\'magnifyend\' event fired');
+    }
+  });
+  </script>
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-2843793-6', 'auto');
+  ga('send', 'pageview');
+  </script>
+
+  </body>
+  </html>

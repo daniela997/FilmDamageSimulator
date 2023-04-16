@@ -499,11 +499,11 @@
             <div class="is-size-5 publication-authors">
               <!-- Paper authors -->
               <span class="author-block">
-                <a href="FIRST AUTHOR PERSONAL LINK" target="_blank">Daniela Ivanova</a></span>
+                <a href="https://daniela997.github.io/" target="_blank">Daniela Ivanova</a></span>
                 <span class="author-block">
-                  <a href="SECOND AUTHOR PERSONAL LINK" target="_blank">John Williamson</a></span>
+                  <a href="http://johnhw.com/" target="_blank">John Williamson</a></span>
                   <span class="author-block">
-                    <a href="THIRD AUTHOR PERSONAL LINK" target="_blank">Paul Henderson</a>
+                    <a href="http://www.pmh47.net/" target="_blank">Paul Henderson</a>
                   </span>
                   </div>
 
@@ -526,15 +526,15 @@
                     </span>
 
                     <!-- Supplementary PDF link -->
-                    <!-- <span class="link-block">
-                      <a href="static/pdfs/supplementary_material.pdf" target="_blank"
+                    <span class="link-block">
+                      <a href="https://gla-my.sharepoint.com/:b:/g/personal/2262058i_student_gla_ac_uk/ETh16PK7HdRJgjeoge1XnrQBqO2wwGb3WN336LMtdusung?e=NJJLmL" target="_blank"
                       class="external-link button is-normal is-rounded is-dark">
                       <span class="icon">
                         <i class="fas fa-file-pdf"></i>
                       </span>
                       <span>Supplementary</span>
                     </a>
-                  </span> -->
+                  </span> 
 
                   <!-- Github link -->
                   <span class="link-block">
@@ -581,44 +581,8 @@
 </section>
 <!-- End teaser video -->
 
-<section class="hero teaser">
-  <div class="grid-container">
-    <div class="grid-item">
-      <img class="zoom sample-subfig" src="static/images/damaged input.jpg" alt="Sample image" data-magnify-src="static/images/damaged input.jpg">
-      <figcaption><b>Input:</b> 4K film scan with authentic damage (hairs and dirt)</figcaption>
-    </div>
-  
-    <div class="grid-item">
-      <img class="zoom sample-subfig" src="static/images/our_mask.png" alt="Sample image" data-magnify-src="static/images/our_mask.png">
-      <figcaption><b>Segmentation:</b> prediction from our U-Net trained on synthetically damaged data.</figcaption>
-    </div>
-
-    <div class="grid-item">
-      <img class="zoom sample-subfig" src="static/images/restoreation_bopbtl_our_masks_no_patches.png" alt="Sample image" data-magnify-src="static/images/restoreation_bopbtl_our_masks_no_patches.png">
-      <figcaption><b>Restoration by BOPB <a href="http://raywzy.com/Old_Photo/" target="_blank">[WZC*20]</a>:</b> using our predicted segmentation.</figcaption>
-    </div>
- 
-    <div class="grid-item">
-      <img class="zoom sample-subfig" src="static/images/restoration_unet_retrained.jpg" alt="Sample image" data-magnify-src="static/images/restoration_unet_retrained.jpg">
-      <figcaption><b>Restoration by U-Net <a href="https://eprints.gla.ac.uk/259748/2/259748.pdf" target="_blank">[ISW22]</a>:</b> retrained on our synthetic damage.</figcaption>
-    </div>
-  
-    <div class="grid-item">
-      <img class="zoom sample-subfig" src="static/images/restoration_lama.png" alt="Sample image" data-magnify-src="static/images/restoration_lama.png">
-      <figcaption><b>Restoration by LaMa <a href="https://advimman.github.io/lama-project/" target="_blank">[SLM*22]</a>:</b> best performing model, using our predicted segmentation.</figcaption>
-    </div>
-
-    <div class="grid-item">
-      <img class="zoom sample-subfig" src="static/images/restoration_gt.jpg" alt="Sample image" data-magnify-src="static/images/restoration_gt.jpg">
-      <figcaption><b>Ground Truth:</b> manually restored in Photoshop by a human expert</figcaption>
-    </div>
-  </div>
-  <div class="container text-padding is-size-6"><figcaption>Input and ground truth from our authentic artefact damage dataset, along with restorations from some of the models we evaluated,
-    presented at full resolution. Mouse over to zoom in.</figcaption></div>
-</section>
-
 <!-- Paper abstract -->
-<section class="section hero is-light">
+<section class="section hero is-light" id="abstract">
   <div class="container is-max-desktop">
     <div class="columns is-centered has-text-centered">
       <div class="column is-four-fifths">
@@ -656,9 +620,68 @@
 </section>
 <!-- End paper abstract -->
 
+<section class="hero teaser">
+  <div class="grid-container">
+    <div class="grid-item">
+      <img class="zoom sample-subfig" src="static/images/damaged input.jpg" alt="Sample image" data-magnify-src="static/images/damaged input.jpg">
+      <figcaption><b>Input:</b> 4K film scan with authentic damage (hairs and dirt)</figcaption>
+    </div>
+  
+    <div class="grid-item">
+      <img class="zoom sample-subfig" src="static/images/our_mask.png" alt="Sample image" data-magnify-src="static/images/our_mask.png">
+      <figcaption><b>Segmentation:</b> prediction from our U-Net trained on synthetically damaged data.</figcaption>
+    </div>
+
+    <div class="grid-item">
+      <img class="zoom sample-subfig" src="static/images/restoreation_bopbtl_our_masks_no_patches.png" alt="Sample image" data-magnify-src="static/images/restoreation_bopbtl_our_masks_no_patches.png">
+      <figcaption><b>Restoration by BOPB <a href="http://raywzy.com/Old_Photo/" target="_blank">[WZC*20]</a>:</b> using our predicted segmentation.</figcaption>
+    </div>
+ 
+    <div class="grid-item">
+      <img class="zoom sample-subfig" src="static/images/restoration_unet_retrained.jpg" alt="Sample image" data-magnify-src="static/images/restoration_unet_retrained.jpg">
+      <figcaption><b>Restoration by U-Net <a href="https://eprints.gla.ac.uk/259748/2/259748.pdf" target="_blank">[ISW22]</a>:</b> retrained on our synthetic damage.</figcaption>
+    </div>
+  
+    <div class="grid-item">
+      <img class="zoom sample-subfig" src="static/images/restoration_lama.png" alt="Sample image" data-magnify-src="static/images/restoration_lama.png">
+      <figcaption><b>Restoration by LaMa <a href="https://advimman.github.io/lama-project/" target="_blank">[SLM*22]</a>:</b> best performing model, using our predicted segmentation.</figcaption>
+    </div>
+
+    <div class="grid-item">
+      <img class="zoom sample-subfig" src="static/images/restoration_gt.jpg" alt="Sample image" data-magnify-src="static/images/restoration_gt.jpg">
+      <figcaption><b>Ground Truth:</b> manually restored in Photoshop by a human expert</figcaption>
+    </div>
+  </div>
+  <div class="container text-padding is-size-6"><figcaption>Input and ground truth from our authentic artefact damage dataset, along with restorations from some of the models we evaluated,
+    presented at full resolution. Mouse over to zoom in.</figcaption></div>
+</section>
+
+<section class="section hero is-light">
+  <div class="container is-max-desktop">
+    <em>
+        <h2 class="title is-3">Contents</h2>
+        <div class="content has-text-justified is-size-5">
+          <ul>
+            <a href="#filmr"><li>Datasets</li></a>
+              <ul>
+                <a href="#filmr"><li>FILM-R: Film Image Library with Manual Restorations</li></a>
+                <a href="#filmaa"><li>FILM-AA: Film Image Library with Manual Artefact Annotations</li></a>
+              </ul>
+              <a href="#segmentation"><li>Results</li></a>
+            <ul>
+              <a href="#segmentation"><li>Segmentation task</li></a>
+              <a href="#restoration"><li>Restoration task</li></a>
+            </ul>
+            <a href="#BibTeX"><li>BibTeX</li></a>
+          </ul> 
+        </div>
+      </em>
+  </div>
+  </section>
+
 
 <!-- Dataset 1 -->
-<section class="hero is-small">
+<section class="hero is-small" id="filmr">
   <div class="hero-body">
     <div class="container">
       <h2 class="title is-3">FILM-R: Film Image Library with Manual Restorations</h2>
@@ -739,7 +762,7 @@
 
 
 <!-- Dataset 2 -->
-<section class="hero is-small is-light">
+<section class="hero is-small is-light" id="filmaa">
   <div class="hero-body">
     <div class="container">
       <h2 class="title is-3">FILM-AA: Film Image Library with Manual Artefact Annotations</h2>
@@ -749,13 +772,13 @@
       </span>
       <div class="is-size-5">
         <form action="" id="damage-types">
-          <input type="radio" id="Dust" name="damage" value="Dust" onClick="changeSrc()">Dust
-          <input type="radio" id="Dirt" name="damage" value="Dirt" onClick="changeSrc()">Dirt
-          <input type="radio" id="Long hairs" name="damage" value="Long hairs" onClick="changeSrc()">Long hairs
-          <input type="radio" id="Short hairs" name="damage" value="Short hairs" onClick="changeSrc()">Short hairs
-          <input type="radio" id="Scratches" name="damage" value="Scratches" onClick="changeSrc()">Scratches
-          <input type="radio" id="All" name="damage" value="All" onClick="changeSrc()", checked="checked">All
-          <input type="radio" id="None" name="damage" value="None" onClick="changeSrc()">None
+          <label><input type="radio" id="Dust" name="damage" value="Dust" onClick="changeSrc()">Dust</label>
+          <label><input type="radio" id="Dirt" name="damage" value="Dirt" onClick="changeSrc()">Dirt</label>
+          <label><input type="radio" id="Long-hairs" name="damage" value="Long hairs" onClick="changeSrc()">Long hairs</label>
+          <label><input type="radio" id="Short-hairs" name="damage" value="Short hairs" onClick="changeSrc()">Short hairs</label>
+          <label><input type="radio" id="Scratches" name="damage" value="Scratches" onClick="changeSrc()">Scratches</label>
+          <label><input type="radio" id="All" name="damage" value="All" onClick="changeSrc()", checked="checked">All</label>
+          <label><input type="radio" id="None" name="damage" value="None" onClick="changeSrc()">None</label>
         </form>
       </div>
 
@@ -771,10 +794,10 @@
             } else if ($("#Scratches").is(":checked")) {
               $("#scan").attr("src", "static/images/scan2-scratch.png");
               $("#scan").attr("data-magnify-src", "static/images/scan2-scratch.png");
-            } else if ($("#Long_hairs").is(":checked")) {
+            } else if ($("#Long-hairs").is(":checked")) {
               $("#scan").attr("src", "static/images/scan2-long-hair.png");
               $("#scan").attr("data-magnify-src", "static/images/scan2-long-hair.png");
-            } else if ($("#Short_hairs").is(":checked")) {
+            } else if ($("#Short-hairs").is(":checked")) {
               $("#scan").attr("src", "static/images/scan2-short-hair.png");
               $("#scan").attr("data-magnify-src", "static/images/scan2-short-hair.png");
             } else if ($("#All").is(":checked")) {
@@ -812,7 +835,7 @@
 <!-- End -->
 
 <!-- Segmentation results -->
-<section class="hero is-small">
+<section class="hero is-small" id="segmentation">
   <div class="hero-body">
     <div class="container">
       <h2 class="title is-3">Damage Segmentation Task</h2>
@@ -1093,7 +1116,7 @@
 </section>
 
 
-<section class="hero is-small is-light">
+<section class="hero is-small is-light" id="restoration">
   <div class="hero-body">
     <div class="container">
       <h2 class="title is-3">Damage Restoration Task</h2>
@@ -1298,17 +1321,18 @@
 
 <!--BibTex citation -->
   <section class="section" id="BibTeX">
-    <div class="container is-max-desktop content">
+    <div class="container is-max-desktop content has-text-justified">
       <h2 class="title">BibTeX</h2>
-      <pre><code>@misc{https://doi.org/10.48550/arxiv.2302.10004,
-        doi = {10.48550/ARXIV.2302.10004},
-        url = {https://arxiv.org/abs/2302.10004},
-        author = {Ivanova, Daniela and Williamson, John and Henderson, Paul},
-        title = {Simulating analogue film damage to analyse and improve artefact restoration on high-resolution scans},
-        publisher = {arXiv},
-        year = {2023},
+      <pre><code>@article{ivanova23analogue,
+        title        = {Simulating analogue film damage to analyse and improve artefact restoration on high-resolution scans},
+        author       = {Daniela Ivanova and John Williamson and Paul Henderson},
+        year         = 2023,
+        journal      = {Computer Graphics Forum (Proc. Eurographics 2023)},
+        volume = {42},
+        number = {2},   
+        doi = {https://doi.org/10.1111/cgf.14749},
         copyright = {Creative Commons Attribution 4.0 International}
-      }
+        }
       </code></pre>
     </div>
 </section>
@@ -1353,7 +1377,7 @@
     // Initiate magnification powers
     $zoom = $('.zoom').magnify({
         afterLoad: function() {
-          console.log('Magnification powers activated!');
+          console.log('');
         }
       });
   });
@@ -1362,10 +1386,10 @@
   });
   $('html').on({
     magnifystart: function() {
-      console.log('\'magnifystart\' event fired');
+      console.log('');
     },
     magnifyend: function() {
-      console.log('\'magnifyend\' event fired');
+      console.log('');
     }
   });
   </script>

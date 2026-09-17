@@ -31,3 +31,6 @@ Temporary Items
 .apdisk
 
 generated
+
+# Synthetic artifact assets (kept locally, not tracked)
+synthetic/

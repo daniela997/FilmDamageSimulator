@@ -170,6 +170,15 @@ def load_images(synthetic_artifacts_dir, artifact_type, verbose=False):
     return images_df#, images_np
 
 def load_all_synthetic_images(synthetic_artifacts_dir, verbose=False):
+    if not os.path.isdir(synthetic_artifacts_dir):
+        raise FileNotFoundError(
+            "No synthetic artifacts found at '{}'. The synthetic artifact set is not "
+            "distributed with this repository; supply your own directory of RGBA PNG "
+            "overlays with one subdirectory per artifact type (dirt, dots, hair, "
+            "hair-short, lint, scratches, smut, spots, sprinkles, stain). Omit the "
+            "--synthetic flag to generate masks from the real annotated artifacts "
+            "only.".format(synthetic_artifacts_dir)
+        )
     subdirs = next(os.walk(synthetic_artifacts_dir))[1]
     df_synthetic_artifacts = pd.DataFrame()
     for subdir in subdirs:
